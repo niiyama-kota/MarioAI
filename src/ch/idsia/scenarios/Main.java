@@ -42,7 +42,7 @@ public static void main(String[] args)
 
     int seed = 99;
     marioAIOptions.setLevelRandSeed(seed);
-    
+
     marioAIOptions.setLevelDifficulty(1);
 
 

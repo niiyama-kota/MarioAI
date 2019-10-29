@@ -61,13 +61,9 @@ public class OwnAgent2 extends BasicMarioAIAgent implements Agent
 	public boolean[] getAction()
 	{
 		y2 = marioFloatPos[1];
-		if(isObstacle(marioEgoRow,marioEgoCol+1) || isHole(1)) {
-			action[Mario.KEY_JUMP] = (!isMarioOnGround || isMarioAbleToJump);
-		}
-
-		if(getEnemiesCellValue(marioEgoRow,marioEgoCol+2)!=Sprite.KIND_NONE ||
+		if(isObstacle(marioEgoRow,marioEgoCol+1) || isHole(1) || getEnemiesCellValue(marioEgoRow,marioEgoCol+2)!=Sprite.KIND_NONE ||
 				getEnemiesCellValue(marioEgoRow,marioEgoCol+1)!=Sprite.KIND_NONE) {
-			action[Mario.KEY_JUMP]=true;
+			action[Mario.KEY_JUMP] = (!isMarioOnGround || isMarioAbleToJump);
 		}
 
 		if(isHole(0) || isHole(1) || getEnemiesCellValue(marioEgoRow,marioEgoCol+2)!=Sprite.KIND_NONE ||
