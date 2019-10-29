@@ -28,9 +28,10 @@
 package ch.idsia.agents.controllers;
 
 import ch.idsia.agents.Agent;
+import ch.idsia.benchmark.mario.engine.GeneralizerLevelScene;
 import ch.idsia.benchmark.mario.engine.sprites.Mario;
+import ch.idsia.benchmark.mario.engine.sprites.Sprite;
 import ch.idsia.benchmark.mario.environments.Environment;
-import java.util.Random;
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,26 +42,83 @@ import java.util.Random;
 
 public class OwnAgent2 extends BasicMarioAIAgent implements Agent
 {
-int trueJumpCounter = 0;
-int trueSpeedCounter = 0;
+	int trueJumpCounter = 0;
+	int trueSpeedCounter = 0;
 
-public OwnAgent2()
-{
-    super("OwnAgent");
-    reset();
-}
+	public OwnAgent2()
+	{
+		super("OwnAgent");
+		reset();
+	}
 
-public void reset()
-{
-    action = new boolean[Environment.numberOfKeys];
-    action[Mario.KEY_RIGHT] = true;
-}
+	public void reset()
+	{
+		action = new boolean[Environment.numberOfKeys];
+		action[Mario.KEY_RIGHT]= true;
+	}
 
-public boolean[] getAction()
-{
-    Random R = new Random();
-    action[Mario.KEY_DOWN] = R.nextBoolean();
-	
-    return action;
-}
+	float y1=0,y2;
+	public boolean[] getAction()
+	{
+		y2 = marioFloatPos[1];
+		if(isObstacle(marioEgoRow,marioEgoCol+1) || isHole(1)) {
+			action[Mario.KEY_JUMP] = (!isMarioOnGround || isMarioAbleToJump);
+		}
+
+		if(getEnemiesCellValue(marioEgoRow,marioEgoCol+2)!=Sprite.KIND_NONE ||
+				getEnemiesCellValue(marioEgoRow,marioEgoCol+1)!=Sprite.KIND_NONE) {
+			action[Mario.KEY_JUMP]=true;
+		}
+
+		if(isHole(0) || isHole(1) || getEnemiesCellValue(marioEgoRow,marioEgoCol+2)!=Sprite.KIND_NONE ||
+				getEnemiesCellValue(marioEgoRow,marioEgoCol+1)!=Sprite.KIND_NONE) {
+			action[Mario.KEY_SPEED] = true;
+		}
+		else {
+			action[Mario.KEY_SPEED] = false;
+		}
+
+		//when seed = 17, this agent cannot arrive goal
+		//revised!
+
+		action[Mario.KEY_LEFT] = falling(y1,y2) && (isHole(1));
+		y1 = y2;
+		return action;
+	}
+
+	public boolean isObstacle(int r, int c){
+		return getReceptiveFieldCellValue(r,
+				c)==GeneralizerLevelScene.BRICK
+				|| getReceptiveFieldCellValue(r,
+						c)==GeneralizerLevelScene.BORDER_CANNOT_PASS_THROUGH
+						|| getReceptiveFieldCellValue(r,
+								c)==GeneralizerLevelScene.FLOWER_POT_OR_CANNON
+								|| getReceptiveFieldCellValue(r,
+										c)==GeneralizerLevelScene.LADDER;
+	}
+
+	public boolean noObstacle(int r, int c) {
+		return getReceptiveFieldCellValue(r,c) == 0;
+	}
+
+	public boolean isHole(int fr) {
+		boolean ins = noObstacle(marioEgoRow,marioEgoCol+fr);
+		for(int i=1;i<10;i++) {
+			ins = ins && noObstacle(marioEgoRow+i,marioEgoCol+fr);
+		}
+		return ins;
+	}
+
+	public boolean isGround(int fr) {
+		boolean ins = !noObstacle(marioEgoRow,marioEgoCol+fr);
+		for(int i=1;i<3;i++) {
+			ins = ins || !noObstacle(marioEgoRow+i,marioEgoCol+fr);
+		}
+		return ins;
+	}
+
+	public boolean falling(float y1, float y2) {
+		return (y2-y1 >= 0);
+	}
+
 }
