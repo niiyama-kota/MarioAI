@@ -61,23 +61,38 @@ public class OwnAgent2 extends BasicMarioAIAgent implements Agent
 	public boolean[] getAction()
 	{
 		y2 = marioFloatPos[1];
+		//jump
 		if(isObstacle(marioEgoRow,marioEgoCol+1) || isHole(1) || getEnemiesCellValue(marioEgoRow,marioEgoCol+2)!=Sprite.KIND_NONE ||
 				getEnemiesCellValue(marioEgoRow,marioEgoCol+1)!=Sprite.KIND_NONE) {
 			action[Mario.KEY_JUMP] = (!isMarioOnGround || isMarioAbleToJump);
 		}
 
-		if(isHole(0) || isHole(1) || getEnemiesCellValue(marioEgoRow,marioEgoCol+2)!=Sprite.KIND_NONE ||
-				getEnemiesCellValue(marioEgoRow,marioEgoCol+1)!=Sprite.KIND_NONE) {
+		//dash
+		if(((isHole(0) || isHole(1)) || trueSpeedCounter==0) || isEnemy(0,3)) {
 			action[Mario.KEY_SPEED] = true;
+			trueSpeedCounter++;
 		}
 		else {
 			action[Mario.KEY_SPEED] = false;
+			trueSpeedCounter=0;
 		}
 
-		//when seed = 17, this agent cannot arrive goal
-		//revised!
-
-		action[Mario.KEY_LEFT] = falling(y1,y2) && (isHole(1));
+		//left
+		if((falling(y1,y2) && isHole(1)) || ((isEnemy(0,3) || isEnemy(1,2)))) {
+			action[Mario.KEY_LEFT] = true;
+		}
+		else {
+			action[Mario.KEY_LEFT] = false;
+		}
+		
+		//right
+		if((isEnemy(0,3) || isEnemy(1,3)) && !isEnemy(-1,1)) {
+			action[Mario.KEY_RIGHT] = false;
+		}
+		else {
+			action[Mario.KEY_RIGHT] = true;
+		}
+		
 		y1 = y2;
 		return action;
 	}
@@ -101,6 +116,14 @@ public class OwnAgent2 extends BasicMarioAIAgent implements Agent
 		boolean ins = noObstacle(marioEgoRow,marioEgoCol+fr);
 		for(int i=1;i<10;i++) {
 			ins = ins && noObstacle(marioEgoRow+i,marioEgoCol+fr);
+		}
+		return ins;
+	}
+	
+	public boolean isEnemy(int x, int y) {
+		boolean ins = false;
+		for(int i=0;i<=y;i++) {
+			ins = ins || (getEnemiesCellValue(marioEgoRow-i,marioEgoCol+x)!=Sprite.KIND_NONE);
 		}
 		return ins;
 	}

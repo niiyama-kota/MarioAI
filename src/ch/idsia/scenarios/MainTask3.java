@@ -38,19 +38,23 @@ import ch.idsia.tools.MarioAIOptions;
  */
 public final class MainTask3
 {
-public static void main(String[] args)
-{
-    final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
+	public static void main(String[] args)
+	{
+		final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
 
-    final Agent agent = new OwnAgent2();
-    marioAIOptions.setAgent(agent);
-    
-    marioAIOptions.setArgs("-lhs off -ltb on -lg off -lb off -ld 1 -ls 0 -le g");
-    
-    final BasicTask basicTask = new BasicTask(marioAIOptions);
-    basicTask.setOptionsAndReset(marioAIOptions);
-    basicTask.doEpisodes(1,true,1);
-    System.exit(0);
-}
+		//
+		marioAIOptions.setLevelRandSeed(18089);
+		marioAIOptions.setLevelDifficulty(1000);
+		
+		final Agent agent = new OwnAgent2();
+		marioAIOptions.setAgent(agent);
+
+		marioAIOptions.setArgs("-lhs off -ltb on -lg off -lb off -ld 1 -ls 0 -le g");
+
+		final BasicTask basicTask = new BasicTask(marioAIOptions);
+		basicTask.setOptionsAndReset(marioAIOptions);
+		basicTask.doEpisodes(1,true,1);
+		System.exit(0);
+	}
 
 }
