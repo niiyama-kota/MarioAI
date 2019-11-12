@@ -62,37 +62,45 @@ public class OwnAgent2 extends BasicMarioAIAgent implements Agent
 	{
 		y2 = marioFloatPos[1];
 		//jump
-		if(isObstacle(marioEgoRow,marioEgoCol+1) || isHole(1) || getEnemiesCellValue(marioEgoRow,marioEgoCol+2)!=Sprite.KIND_NONE ||
-				getEnemiesCellValue(marioEgoRow,marioEgoCol+1)!=Sprite.KIND_NONE) {
+		if((isObstacle(marioEgoRow,marioEgoCol+1) || isHole(1) || isEnemy(2,0) ||
+				isEnemy(1,0) && !isEnemy(0,3))) {
 			action[Mario.KEY_JUMP] = (!isMarioOnGround || isMarioAbleToJump);
 		}
 
 		//dash
-		if(((isHole(0) || isHole(1)) || trueSpeedCounter==0) || isEnemy(0,3)) {
+		if((isHole(0) || isHole(1)) || (trueSpeedCounter==0 && (isEnemy(1,3) || isEnemy(2,3)))) {
 			action[Mario.KEY_SPEED] = true;
 			trueSpeedCounter++;
 		}
 		else {
-			action[Mario.KEY_SPEED] = false;
-			trueSpeedCounter=0;
+			if(trueSpeedCounter == 0) {
+				action[Mario.KEY_SPEED] = true;
+				trueSpeedCounter++;
+			}
+			else{
+				action[Mario.KEY_SPEED] = false;
+				trueSpeedCounter=0;
+			}
 		}
 
 		//left
-		if((falling(y1,y2) && isHole(1)) || ((isEnemy(0,3) || isEnemy(1,2)))) {
+		if((falling(y1,y2) && isHole(1)) || (falling(y1,y2) && isEnemy(0,-3) && action[Mario.KEY_RIGHT]) || isEnemy(1,3) || isEnemy(2,3) ||
+				(!isMarioOnGround && (isEnemy(1,0) || isEnemy(2,0) ||isEnemy(3,0) || isEnemy(4,0)))) {
 			action[Mario.KEY_LEFT] = true;
 		}
 		else {
 			action[Mario.KEY_LEFT] = false;
 		}
-		
+
 		//right
-		if((isEnemy(0,3) || isEnemy(1,3)) && !isEnemy(-1,1)) {
+		if(((falling(y1,y2) && isHole(1)) || isEnemy(0,3)) && !isEnemy(-1,1) || isEnemy(1,3) || isEnemy(2,3) || isEnemy(3,3) ||
+				(!isMarioOnGround && (isEnemy(1,0) || isEnemy(2,0) ||isEnemy(3,0) || isEnemy(4,0)) && isEnemy(1,-1))) {
 			action[Mario.KEY_RIGHT] = false;
 		}
 		else {
 			action[Mario.KEY_RIGHT] = true;
 		}
-		
+
 		y1 = y2;
 		return action;
 	}
@@ -119,7 +127,7 @@ public class OwnAgent2 extends BasicMarioAIAgent implements Agent
 		}
 		return ins;
 	}
-	
+
 	public boolean isEnemy(int x, int y) {
 		boolean ins = false;
 		for(int i=0;i<=y;i++) {

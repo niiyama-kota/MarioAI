@@ -43,9 +43,10 @@ public final class MainTask3
 		final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
 
 		//
-		marioAIOptions.setLevelRandSeed(18089);
-		marioAIOptions.setLevelDifficulty(1000);
-		
+//		marioAIOptions.setLevelDifficulty(1000);
+
+		for(int i=0; i<100;i++) {
+			marioAIOptions.setLevelRandSeed(i);
 		final Agent agent = new OwnAgent2();
 		marioAIOptions.setAgent(agent);
 
@@ -54,6 +55,7 @@ public final class MainTask3
 		final BasicTask basicTask = new BasicTask(marioAIOptions);
 		basicTask.setOptionsAndReset(marioAIOptions);
 		basicTask.doEpisodes(1,true,1);
+		}
 		System.exit(0);
 	}
 
