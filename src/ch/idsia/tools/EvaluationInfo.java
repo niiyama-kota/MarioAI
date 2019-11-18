@@ -27,14 +27,14 @@
 
 package ch.idsia.tools;
 
-import ch.idsia.benchmark.mario.engine.sprites.Mario;
-import ch.idsia.benchmark.tasks.MarioSystemOfValues;
-import ch.idsia.benchmark.tasks.SystemOfValues;
-
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+
+import ch.idsia.benchmark.mario.engine.sprites.Mario;
+import ch.idsia.benchmark.tasks.MarioSystemOfValues;
+import ch.idsia.benchmark.tasks.SystemOfValues;
 
 /**
  * Created by IntelliJ IDEA.

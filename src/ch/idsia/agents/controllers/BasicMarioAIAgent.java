@@ -212,4 +212,12 @@ public int getReceptiveFieldCellValue(int x, int y)
 //        getKillsByStomp = marioState[8];
 //        getKillsByShell = marioState[9];
 //    }
+
+public float[] getMarioFloatPos() {
+	return marioFloatPos;
+}
+
+public boolean getIsMarioOnGround() {
+	return isMarioOnGround;
+}
 }

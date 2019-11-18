@@ -43,18 +43,17 @@ public final class MainTask3
 		final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
 
 		//
-//		marioAIOptions.setLevelDifficulty(1000);
-
-		for(int i=0; i<100;i++) {
-			marioAIOptions.setLevelRandSeed(i);
+		//		marioAIOptions.setLevelDifficulty(1000);
 		final Agent agent = new OwnAgent2();
+		marioAIOptions.setArgs("-lhs off -ltb on -lg off -lb off -ld 1 -ls 0 -le g");
 		marioAIOptions.setAgent(agent);
 
-		marioAIOptions.setArgs("-lhs off -ltb on -lg off -lb off -ld 1 -ls 0 -le g");
-
-		final BasicTask basicTask = new BasicTask(marioAIOptions);
-		basicTask.setOptionsAndReset(marioAIOptions);
-		basicTask.doEpisodes(1,true,1);
+		for(int i=0; i<100;i++) {
+			int seed = i;
+			marioAIOptions.setLevelRandSeed(seed);
+			final BasicTask basicTask = new BasicTask(marioAIOptions);
+			basicTask.setOptionsAndReset(marioAIOptions);
+			basicTask.doEpisodes(1,true,1);
 		}
 		System.exit(0);
 	}

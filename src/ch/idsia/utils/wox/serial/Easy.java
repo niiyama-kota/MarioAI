@@ -27,14 +27,18 @@
 
 package ch.idsia.utils.wox.serial;
 
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.XMLOutputter;
-
-import java.io.FileInputStream;
-import java.io.FileWriter;
-import java.io.InputStream;
 
 /**
  * Created by IntelliJ IDEA.
@@ -62,6 +66,22 @@ public static void save(Object ob, String filename)
     }
 }
 
+public static void save_gene(byte[] ob, String filename)
+{
+	try {
+		FileWriter file = new FileWriter("C:/univ/MarioAI/" + filename);
+		PrintWriter pw = new PrintWriter(new BufferedWriter(file));
+		for(byte element : ob) {
+		pw.print(element + " ");
+		}
+		pw.close();
+		System.out.println("Saved object to " + filename);
+	}
+	catch (IOException e) {
+		e.printStackTrace();
+	}
+}
+
 public static Object load(String filename)
 {
     try
@@ -77,5 +97,22 @@ public static Object load(String filename)
         System.err.println("Easy: cannot find wox definition with name " + filename);
         return null;
     }
+}
+
+public static byte[] load_gene(String filename) {
+	try {
+		Scanner sc = new Scanner(filename);
+		byte[] gene = new byte[1 << 16];
+		int i= 0;
+		while(sc.hasNext()) {
+			gene[i] = sc.nextByte();
+			i++;
+		}
+		return gene;
+	}
+	catch(Exception e) {
+		System.err.println("Easy: cannot find wox definition with name " + filename);
+        return null;
+	}
 }
 }

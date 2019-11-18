@@ -29,6 +29,7 @@ package ch.idsia.agents.controllers;
 
 import ch.idsia.agents.Agent;
 import ch.idsia.benchmark.mario.engine.GeneralizerLevelScene;
+import ch.idsia.benchmark.mario.engine.LevelScene;
 import ch.idsia.benchmark.mario.engine.sprites.Mario;
 import ch.idsia.benchmark.mario.engine.sprites.Sprite;
 import ch.idsia.benchmark.mario.environments.Environment;
@@ -44,10 +45,12 @@ public class OwnAgent2 extends BasicMarioAIAgent implements Agent
 {
 	int trueJumpCounter = 0;
 	int trueSpeedCounter = 0;
+	private final LevelScene levelScene;
 
 	public OwnAgent2()
 	{
 		super("OwnAgent");
+		this.levelScene = new LevelScene();
 		reset();
 	}
 
@@ -57,50 +60,99 @@ public class OwnAgent2 extends BasicMarioAIAgent implements Agent
 		action[Mario.KEY_RIGHT]= true;
 	}
 
+
 	float y1=0,y2;
+	float x1=0,x2;
+	float x_e1 = 255, x_e2;
 	public boolean[] getAction()
 	{
+		x2 = marioFloatPos[0];
 		y2 = marioFloatPos[1];
+		if(enemiesFloatPos.length>0) {
+			x_e2 = enemiesFloatPos[1];
+		}
+		System.out.println(x2);
 		//jump
-		if((isObstacle(marioEgoRow,marioEgoCol+1) || isHole(1) || isEnemy(2,0) ||
-				isEnemy(1,0) && !isEnemy(0,3))) {
+		action[Mario.KEY_JUMP] = false;
+		if(isObstacle(marioEgoRow,marioEgoCol+1)) {
+			action[Mario.KEY_JUMP] = (!isMarioOnGround || isMarioAbleToJump);
+		}
+		if(isEnemy(0,2)) {
+			action[Mario.KEY_JUMP] = false;
+		}
+		if(isEnemy(1,3) || isEnemy(2,3)) {
+			action[Mario.KEY_JUMP] = (!isMarioOnGround || isMarioAbleToJump);
+		}
+		if(isHole(1)) {
 			action[Mario.KEY_JUMP] = (!isMarioOnGround || isMarioAbleToJump);
 		}
 
 		//dash
-		if((isHole(0) || isHole(1)) || (trueSpeedCounter==0 && (isEnemy(1,3) || isEnemy(2,3)))) {
-			action[Mario.KEY_SPEED] = true;
-			trueSpeedCounter++;
-		}
-		else {
-			if(trueSpeedCounter == 0) {
+		action[Mario.KEY_SPEED] = false;
+		if(isEnemy(1,3) || isEnemy(2,3) || isEnemy(-1,3) || isEnemy(-2,3) || isEnemy(1,-3) || isEnemy(-1,-3) || isEnemy(2,-3) || isEnemy(-2,-3)) {
+			if((isEnemy(1,2) || isEnemy(-1,2) || isEnemy(2,2) || isEnemy(-2,2)) && (marioMode==2)) {
 				action[Mario.KEY_SPEED] = true;
 				trueSpeedCounter++;
 			}
-			else{
+			else {
 				action[Mario.KEY_SPEED] = false;
-				trueSpeedCounter=0;
+				trueSpeedCounter = 0;
 			}
+		}
+		else {
+			if(trueSpeedCounter == 0 && (marioMode==2)) {
+				action[Mario.KEY_SPEED] = isMarioAbleToShoot;
+				trueSpeedCounter++;
+			}
+			else {
+				action[Mario.KEY_SPEED] = false;
+				trueSpeedCounter = 0;
+			}
+		}
+		if((isHole(0) || isHole(1))) {
+			action[Mario.KEY_SPEED] = true;
+			trueSpeedCounter++;
 		}
 
 		//left
-		if((falling(y1,y2) && isHole(1)) || (falling(y1,y2) && isEnemy(0,-3) && action[Mario.KEY_RIGHT]) || isEnemy(1,3) || isEnemy(2,3) ||
-				(!isMarioOnGround && (isEnemy(1,0) || isEnemy(2,0) ||isEnemy(3,0) || isEnemy(4,0)))) {
+		action[Mario.KEY_LEFT] = false;
+		if(!isMarioOnGround && (isEnemy(1,-3) && isEnemy(1,-1))){
+			action[Mario.KEY_LEFT] = false;
+		}
+		if(!isMarioOnGround && isEnemy(0,-2)) {
+			action[Mario.KEY_LEFT] = false;
+		}
+		if(isEnemy(0,3) || isEnemy(1,4) || isEnemy(2,4)) {
 			action[Mario.KEY_LEFT] = true;
 		}
-		else {
+		if((getReceptiveFieldCellValue(marioEgoRow,marioEgoCol+1)==-85 && getEnemiesCellValue(marioEgoRow,marioEgoCol+1)==91)
+				|| (getReceptiveFieldCellValue(marioEgoRow,marioEgoCol+2)==-85 && getEnemiesCellValue(marioEgoRow,marioEgoCol+2)==91)) {
 			action[Mario.KEY_LEFT] = false;
+		}
+		if((falling(y1,y2) && isHole(1))) {
+			action[Mario.KEY_LEFT] = true;
 		}
 
 		//right
-		if(((falling(y1,y2) && isHole(1)) || isEnemy(0,3)) && !isEnemy(-1,1) || isEnemy(1,3) || isEnemy(2,3) || isEnemy(3,3) ||
-				(!isMarioOnGround && (isEnemy(1,0) || isEnemy(2,0) ||isEnemy(3,0) || isEnemy(4,0)) && isEnemy(1,-1))) {
-			action[Mario.KEY_RIGHT] = false;
-		}
-		else {
+		action[Mario.KEY_RIGHT] = true;
+		if(!isMarioOnGround && (isEnemy(1,-3) && !isEnemy(1,-1))) {
 			action[Mario.KEY_RIGHT] = true;
 		}
+		if(!isMarioOnGround && isEnemy(0,-2)) {
+			action[Mario.KEY_RIGHT] = false;
+		}
+		if(isEnemy(0,3) || isEnemy(1,3) || isEnemy(2,3)) {
+			action[Mario.KEY_RIGHT] = false;
+		}
+		if((getEnemiesCellValue(marioEgoRow,marioEgoCol+1)==91 || getEnemiesCellValue(marioEgoRow,marioEgoCol+2)==91)
+				|| (getReceptiveFieldCellValue(marioEgoRow,marioEgoCol+2)==-85 && getEnemiesCellValue(marioEgoRow,marioEgoCol+2)==91)) {
+			action[Mario.KEY_RIGHT] = true;
+		}
+		if(falling(y1,y2) && isHole(1) && isHole(2)) {
+			action[Mario.KEY_RIGHT] = false;
+		}
 
+		x1 = x2;
 		y1 = y2;
 		return action;
 	}
@@ -131,7 +183,7 @@ public class OwnAgent2 extends BasicMarioAIAgent implements Agent
 	public boolean isEnemy(int x, int y) {
 		boolean ins = false;
 		for(int i=0;i<=y;i++) {
-			ins = ins || (getEnemiesCellValue(marioEgoRow-i,marioEgoCol+x)!=Sprite.KIND_NONE);
+			ins = ins || ((getEnemiesCellValue(marioEgoRow-i,marioEgoCol+x)!=Sprite.KIND_NONE && getEnemiesCellValue(marioEgoRow-i,marioEgoCol+x)!= 25));
 		}
 		return ins;
 	}
