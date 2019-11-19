@@ -184,6 +184,8 @@ implements Agent,Evolvable,Comparable,Cloneable{
 //				input += probe(1 ,0 ,levelScene) * (1 << 4);
 //				input += probe(-1,1 ,levelScene) * (1 << 3);
 //				input += probe(1 ,1 ,levelScene) * (1 << 2);
+		
+		//4-1's conditions
 
 		input += (isEnemy(1,3) ? 1: 0) * (1 << 15);
 		input += (isEnemy(-1,3) ? 1: 0) * (1 << 14);

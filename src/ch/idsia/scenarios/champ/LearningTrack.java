@@ -210,14 +210,17 @@ private static int oldEval(MarioAIOptions marioAIOptions, LearningAgent learning
 public static void main(String[] args){
 
 	/* 学習に用いるAgentを指定 */
+	
+	//MainTask3
+//	LearningAgent learningAgent = new LearningWithGA("-lhs off -ltb on -lg off -lb off -ld 1 -ls 0 -le g");
 
 	/* MainTask4_1.java */
 //	LearningAgent learningAgent = new LearningWithGA("-lde on -i on -ltb off -ld 2 -ls 0 -le g");
-	LearningAgent learningAgent = new LearningWithGA("-lde on -ltb off -ld 2 -ls 0 -le g");
+//	LearningAgent learningAgent = new LearningWithGA("-lde on -ltb off -ld 2 -ls 0 -le g");
 
 	/* MainTask4_2.java */
-//	 LearningAgent learningAgent = new LearningWithGA("-lco off -lb on -le off -lhb off -lg on -ltb on -lhs off -lca on -lde on -ld 5 -ls 133829");
-
+	 LearningAgent learningAgent = new LearningWithGA("-lco off -lb on -le off -lhb off -lg on -ltb on -lhs off -lca on -lde on -ld 5 -ls 133829");
+	 
 	/* MainTask4_3.java */
 	// LearningAgent learningAgent = new LearningWithGA("-lde on -i off -ld 30 -ls 133434 -lhb on");
 

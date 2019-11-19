@@ -48,13 +48,13 @@ public final class MainTask3
 		marioAIOptions.setArgs("-lhs off -ltb on -lg off -lb off -ld 1 -ls 0 -le g");
 		marioAIOptions.setAgent(agent);
 
-		for(int i=0; i<100;i++) {
-			int seed = i;
-			marioAIOptions.setLevelRandSeed(seed);
+		//for(int i=0; i<100;i++) {
+			//int seed = i;
+			//marioAIOptions.setLevelRandSeed(seed);
 			final BasicTask basicTask = new BasicTask(marioAIOptions);
 			basicTask.setOptionsAndReset(marioAIOptions);
 			basicTask.doEpisodes(1,true,1);
-		}
+		//}
 		System.exit(0);
 	}
 

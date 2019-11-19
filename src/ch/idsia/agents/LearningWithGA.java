@@ -13,7 +13,7 @@ import ch.idsia.utils.wox.serial.Easy;
 public class LearningWithGA implements LearningAgent{
 
 	/* 個体数 */
-	final int popsize = 100;
+	final int popsize = 1000;
 
 	/* エリート数 */
 	final int bestnum = 2;
@@ -50,8 +50,9 @@ public class LearningWithGA implements LearningAgent{
 //			if (i%2 == 0) agents[i] = (GAAgent)(Easy.load("LearningWithGA-best'.xml"));
 //			if (i%2 == 1) agents[i] = (GAAgent)(Easy.load("LearningWithGA-best''.xml"));
 //			agents[i] = new GAAgent();
-			agents[i] = (GAAgent)(Easy.load("LearningWithGA-best.xml"));
+			agents[i] = (GAAgent)(Easy.load("4-1.xml"));
 		}
+		mutate();
 
 		/* agent[0] をbestAgentとして初期化 */
 		bestAgent = agents[0].clone();
@@ -94,7 +95,7 @@ public class LearningWithGA implements LearningAgent{
 			/* 突然変異 */
 			mutate();
 
-			int EndEpoch = 500;
+			int EndEpoch = 1000;
 			if( generation == EndEpoch){
 				System.out.println("Generation["+generation+"] : Playing!");
 				halfwayPlayMario(bestAgent);
@@ -140,7 +141,7 @@ public class LearningWithGA implements LearningAgent{
 			/* 評価値(距離)をセット */
 			EvaluationInfo evaluationInfo = basicTask.getEvaluationInfo();
 //			agents[i].setFitness(evaluationInfo.distancePassedCells );
-			agents[i].setFitness(evaluationInfo.computeWeightedFitness());
+			agents[i].setFitness(evaluationInfo.computeWeightedFitness() + evaluationInfo.distancePassedCells);
 
 			agents[i].setDistance(evaluationInfo.distancePassedCells);
 
