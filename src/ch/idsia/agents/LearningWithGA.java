@@ -50,7 +50,7 @@ public class LearningWithGA implements LearningAgent{
 //			if (i%2 == 0) agents[i] = (GAAgent)(Easy.load("LearningWithGA-best'.xml"));
 //			if (i%2 == 1) agents[i] = (GAAgent)(Easy.load("LearningWithGA-best''.xml"));
 //			agents[i] = new GAAgent();
-			agents[i] = (GAAgent)(Easy.load("4-1.xml"));
+			agents[i] = (GAAgent)(Easy.load("4-2.xml"));
 		}
 		mutate();
 
