@@ -71,7 +71,7 @@ public class OwnAgent2 extends BasicMarioAIAgent implements Agent
 		if(enemiesFloatPos.length>0) {
 			x_e2 = enemiesFloatPos[1];
 		}
-		System.out.println(x2);
+
 		//jump
 		action[Mario.KEY_JUMP] = false;
 		if(isObstacle(marioEgoRow,marioEgoCol+1)) {
@@ -116,12 +116,6 @@ public class OwnAgent2 extends BasicMarioAIAgent implements Agent
 
 		//left
 		action[Mario.KEY_LEFT] = false;
-		if(!isMarioOnGround && (isEnemy(1,-3) && isEnemy(1,-1))){
-			action[Mario.KEY_LEFT] = false;
-		}
-		if(!isMarioOnGround && isEnemy(0,-2)) {
-			action[Mario.KEY_LEFT] = false;
-		}
 		if(isEnemy(0,3) || isEnemy(1,4) || isEnemy(2,4)) {
 			action[Mario.KEY_LEFT] = true;
 		}
@@ -135,9 +129,6 @@ public class OwnAgent2 extends BasicMarioAIAgent implements Agent
 
 		//right
 		action[Mario.KEY_RIGHT] = true;
-		if(!isMarioOnGround && (isEnemy(1,-3) && !isEnemy(1,-1))) {
-			action[Mario.KEY_RIGHT] = true;
-		}
 		if(!isMarioOnGround && isEnemy(0,-2)) {
 			action[Mario.KEY_RIGHT] = false;
 		}
@@ -188,13 +179,6 @@ public class OwnAgent2 extends BasicMarioAIAgent implements Agent
 		return ins;
 	}
 
-	public boolean isGround(int fr) {
-		boolean ins = !noObstacle(marioEgoRow,marioEgoCol+fr);
-		for(int i=1;i<3;i++) {
-			ins = ins || !noObstacle(marioEgoRow+i,marioEgoCol+fr);
-		}
-		return ins;
-	}
 
 	public boolean falling(float y1, float y2) {
 		return (y2-y1 >= 0);

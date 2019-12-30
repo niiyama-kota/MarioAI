@@ -1,12 +1,11 @@
 package ch.idsia.agents;
-import java.util.*;
-import java.math.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import ch.idsia.agents.controllers.BasicMarioAIAgent;
 import ch.idsia.benchmark.mario.engine.sprites.Mario;
-import ch.idsia.benchmark.mario.engine.sprites.Sprite;
-import ch.idsia.benchmark.mario.environments.*;
-import ch.idsia.agents.KeyOfMC;
+import ch.idsia.benchmark.mario.environments.Environment;
 
 public class MCAgent extends BasicMarioAIAgent implements Agent{
 	static String name = "MCAgent";
@@ -130,25 +129,27 @@ public class MCAgent extends BasicMarioAIAgent implements Agent{
 	//ここでマリオが得る情報をほとんど決めている
 	//ついでにマリオが地面にいるかも取得
 	public void detectObstacle(){
-		state = 0;
-		for(int j = 0; j < width; ++j){
-			if(getEnemiesCellValue(marioEgoRow + j - 1,marioEgoCol + 1) != Sprite.KIND_NONE)
-				state += (int)Math.pow(2,j);
-		}
-		for(int j = 0; j < width; ++j){
-			if(getReceptiveFieldCellValue(marioEgoRow + j - 1,marioEgoCol + 1) != 0)
-				state += (int)Math.pow(2,width + j);
-		}
-		for(int j = 0; j < width; ++j){
-			if(getEnemiesCellValue(marioEgoRow + j - 1,marioEgoCol + 2) != Sprite.KIND_NONE)
-				state += (int)Math.pow(2, 2 * width + j);
-		}
-		for(int j = 0; j < width; ++j){
-			if(getReceptiveFieldCellValue(marioEgoRow + j - 1,marioEgoCol + 2) != 0)
-				state += (int)Math.pow(2,3 * width + j);
-		}
-		if(isMarioOnGround)
-			state += (int)Math.pow(2, 4 * width);
+//		state = 0;
+//		for(int j = 0; j < width; ++j){
+//			if(getEnemiesCellValue(marioEgoRow + j - 1,marioEgoCol + 1) != Sprite.KIND_NONE)
+//				state += (int)Math.pow(2,j);
+//		}
+//		for(int j = 0; j < width; ++j){
+//			if(getReceptiveFieldCellValue(marioEgoRow + j - 1,marioEgoCol + 1) != 0)
+//				state += (int)Math.pow(2,width + j);
+//		}
+//		for(int j = 0; j < width; ++j){
+//			if(getEnemiesCellValue(marioEgoRow + j - 1,marioEgoCol + 2) != Sprite.KIND_NONE)
+//				state += (int)Math.pow(2, 2 * width + j);
+//		}
+//		for(int j = 0; j < width; ++j){
+//			if(getReceptiveFieldCellValue(marioEgoRow + j - 1,marioEgoCol + 2) != 0)
+//				state += (int)Math.pow(2,3 * width + j);
+//		}
+//		if(isMarioOnGround)
+//			state += (int)Math.pow(2, 4 * width);
+		
+		
 	}
 	//boolをintへ
 	public int boolToInt(boolean b){
@@ -158,8 +159,8 @@ public class MCAgent extends BasicMarioAIAgent implements Agent{
 	public void detectCliff(){
 		
 		boolean b = true;
-		for(int i = 0; i < 10; ++i){
-			if(getReceptiveFieldCellValue(marioEgoRow + i,marioEgoCol + 1) != 0){
+		for(int i = 0; i < 4; ++i){
+			if(getReceptiveFieldCellValue(marioEgoRow - i,marioEgoCol + 1) == 0){
 				b = false;
 				break;
 			}

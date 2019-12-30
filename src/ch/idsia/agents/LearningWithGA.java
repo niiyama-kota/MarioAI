@@ -13,7 +13,7 @@ import ch.idsia.utils.wox.serial.Easy;
 public class LearningWithGA implements LearningAgent{
 
 	/* 個体数 */
-	final int popsize = 1000;
+	final int popsize = 100;
 
 	/* エリート数 */
 	final int bestnum = 2;
@@ -47,12 +47,11 @@ public class LearningWithGA implements LearningAgent{
 		/* 個体数分だけAgentを作成 */
 		agents = new GAAgent[popsize];
 		for (int i=0; i<agents.length; i++){
-//			if (i%2 == 0) agents[i] = (GAAgent)(Easy.load("LearningWithGA-best'.xml"));
-//			if (i%2 == 1) agents[i] = (GAAgent)(Easy.load("LearningWithGA-best''.xml"));
+//			if (i%2 == 0) agents[i] = (GAAgent)(Easy.load("LearningWithGA-best.xml"));
+//			if (i%2 == 1) agents[i] = new GAAgent();
 //			agents[i] = new GAAgent();
-			agents[i] = (GAAgent)(Easy.load("4-2.xml"));
+			agents[i] = (GAAgent)(Easy.load("LearningWithGA-best_1221.xml"));
 		}
-		mutate();
 
 		/* agent[0] をbestAgentとして初期化 */
 		bestAgent = agents[0].clone();
@@ -95,7 +94,7 @@ public class LearningWithGA implements LearningAgent{
 			/* 突然変異 */
 			mutate();
 
-			int EndEpoch = 1000;
+			int EndEpoch = 100000;
 			if( generation == EndEpoch){
 				System.out.println("Generation["+generation+"] : Playing!");
 				halfwayPlayMario(bestAgent);
@@ -141,7 +140,12 @@ public class LearningWithGA implements LearningAgent{
 			/* 評価値(距離)をセット */
 			EvaluationInfo evaluationInfo = basicTask.getEvaluationInfo();
 //			agents[i].setFitness(evaluationInfo.distancePassedCells );
-			agents[i].setFitness(evaluationInfo.computeWeightedFitness() + evaluationInfo.distancePassedCells);
+			agents[i].setFitness(evaluationInfo.distancePassedCells * 1000
+					+ evaluationInfo.killsByFire * 500
+					+ evaluationInfo.killsByStomp * 3000
+					+ evaluationInfo.killsByShell * 300
+					+ evaluationInfo.hiddenBlocksFound * 800
+					+ evaluationInfo.totalNumberOfFlowers * 500);
 
 			agents[i].setDistance(evaluationInfo.distancePassedCells);
 
@@ -227,10 +231,10 @@ public class LearningWithGA implements LearningAgent{
 	/* 交叉 */
 	private void cross(GAAgent[] nextagents, int[] parentsGene, int i) {
 
-		int geneLength = (1<<16);
+		int geneLength = (1<<17);
 
-		int sum = parentsGene[0]+parentsGene[1];
-		float roulette = 1 - (float)parentsGene[0]/(float)sum;
+		int sum = agents[parentsGene[0]].getFitness()+agents[parentsGene[1]].getFitness();
+		float roulette = 1 - (float)agents[parentsGene[1]].getFitness()/(float)sum;
 //		System.out.println("parentsGene[0] : "+parentsGene[0]);
 //		System.out.println("parentsGene[1] : "+parentsGene[1]);
 //		System.out.println("roulette : "+roulette);
@@ -281,12 +285,14 @@ public class LearningWithGA implements LearningAgent{
 
 	/* 突然変異 */
 	private void mutate() {
+		//
+		int[] gene_cand = {16,17,18,19,24,25,26,27};
 
 		int popsize2 = popsize - 2;
 //		float mutation = popsize * mutateRate;	//突然変異させる個体数(float型)を設定(現在10個体)
 		int mutationInt = (int) Math.floor(popsize*mutateRate);	//突然変異させる個体数(int型)
 //		float mutation3 = (1 << 16) * mutateRate;	//突然変異させる遺伝子座の個数(float型)
-		int mutateGeneInt = (int) Math.floor((1<<16) * mutateRate);	//突然変異させる遺伝子座の個数(int型)(65536)
+		int mutateGeneInt = (int) Math.floor((1<<17) * mutateRate/5);	//突然変異させる遺伝子座の個数(int型)(65536)
 
 		int[] ran = new int[mutationInt];		//乱数格納用配列
 		int geneRan;
@@ -301,7 +307,7 @@ public class LearningWithGA implements LearningAgent{
 			for(int j=0; j<mutationInt; j++){
 				if(i == ran[j]){	//突然変異させる個体を発見したら
 					for(int k=0 ; k<mutateGeneInt ; k++){	//全体の10%を突然変異させる
-						geneRan = r.nextInt(1<<16);
+						geneRan = r.nextInt(1<<17);
 						agents[i].setGene(geneRan,(byte) r.nextInt(num));
 					}
 				}

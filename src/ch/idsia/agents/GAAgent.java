@@ -23,7 +23,7 @@ implements Agent,Evolvable,Comparable,Cloneable{
 	public int fitness;
 
 	/* 環境から取得する入力数 */
-	public int inputNum = 16;
+	public int inputNum = 17;
 
 	/* 乱数用変数 r */
 	Random r = new Random();
@@ -72,8 +72,8 @@ implements Agent,Evolvable,Comparable,Cloneable{
 			//			gene[i] = (byte)r.nextInt(17);
 		}
 
-//		gene = Easy.load_gene("LearningWithGA-best.txt");
-		
+		//		gene = Easy.load_gene("LearningWithGA-best.txt");
+
 		/* 評価値を0で初期化 */
 		fitness = 0;
 
@@ -120,7 +120,24 @@ implements Agent,Evolvable,Comparable,Cloneable{
 		}
 		return ins;
 	}
-	
+
+	public boolean isCannonLev(int y) {
+		boolean ins = false;
+		for(int i=-9;i<=9;i++) {
+			ins = ins || ((getEnemiesCellValue(marioEgoRow-y,marioEgoCol+i)==84));
+		}
+		return ins;
+	}
+
+	public boolean isEnemyLev(int y) {
+		boolean ins = false;
+		for(int i=-9;i<=9;i++) {
+			ins = ins || (getEnemiesCellValue(marioEgoRow-y,marioEgoCol+i)!= Sprite.KIND_NONE && (getEnemiesCellValue(marioEgoRow-y,marioEgoCol+i)!=25));
+		}
+		return ins;
+	}
+
+
 	public boolean isObject(int x, int y) {
 		boolean ins = false;
 		for(int i=0;i<=y;i++) {
@@ -128,6 +145,16 @@ implements Agent,Evolvable,Comparable,Cloneable{
 		}
 		return ins;
 	}
+
+//	public boolean isObject(int x, int y) {
+//		boolean ins = false;
+//		for(int i=0;i<=y;i++) {
+//			ins = ins || (getReceptiveFieldCellValue(marioEgoRow-i,marioEgoCol+x)!=0 
+//					|| getReceptiveFieldCellValue(marioEgoRow-i,marioEgoCol+x) != 2 
+//					|| getReceptiveFieldCellValue(marioEgoRow-i,marioEgoCol+x) != 5);
+//		}
+//		return ins;
+//	}
 
 	public boolean isWall() {
 		boolean ins = true;
@@ -149,16 +176,57 @@ implements Agent,Evolvable,Comparable,Cloneable{
 		}
 		return ins;
 	}
-	
+
 	public int marioDirection(float x1, float x2) {
 		if(x2-x1>0) return 1;
 		else return 0;
 	}
+	public int enemyDetailR() {
+		if(enemiesFloatPos.length < 3) {
+			return 0;
+		}
+		if(enemiesFloatPos[0] == 91 || enemiesFloatPos[0] == 93 || enemiesFloatPos[0] == 99) {
+			return 1;
+		}
+		else {
+			if(marioFloatPos[1] > enemiesFloatPos[2]+1) {
+				return 0;
+			}
+			else if(enemiesFloatPos[1] - marioFloatPos[0] < 5 && enemiesFloatPos[1] - marioFloatPos[0] > 0) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
+	}
+
+	public int enemyDetailL() {
+		if(enemiesFloatPos.length<3) {
+			return 0;
+		}
+		if(enemiesFloatPos[0] == 91 || enemiesFloatPos[0] == 93 || enemiesFloatPos[0] == 99) {
+			return 1;
+		}
+		else {
+			if(marioFloatPos[1] > enemiesFloatPos[2]+1) {
+				return 0;
+			}
+			else if(-enemiesFloatPos[1] + marioFloatPos[0] < 5 && -enemiesFloatPos[1] + marioFloatPos[0] > 0) {
+				return 1;
+			}
+			else {
+				return 0;
+			}
+		}
+	}
+
 
 	float x1 = 0, x2;
 	public boolean[] getAction(){
 
 		int input = 0;
+//		int input2 = 0;
 		x2 = marioFloatPos[0];
 
 
@@ -168,54 +236,83 @@ implements Agent,Evolvable,Comparable,Cloneable{
 		 */
 
 		/* enemies情報(上位7桁) */
-//				input += probe(-1,-1,enemies) * (1 << 15); //probe * 2^15
-//				input += probe(0 ,-1,enemies) * (1 << 14);
-//				input += probe(1 ,-1,enemies) * (1 << 13);
-//				input += probe(-1,0 ,enemies) * (1 << 12);
-//				input += probe(1 ,0 ,enemies) * (1 << 11);
-//				input += probe(-1,1 ,enemies) * (1 << 10);
-//				input += probe(1 ,1 ,enemies) * (1 <<  9);
+//		input2 += (getEnemiesCellValue(marioEgoRow+1,marioEgoCol) == 93 || getEnemiesCellValue(marioEgoRow+1,marioEgoCol) == 99) ? 1: 0 * (1<<16);  
+//		input2 += probe(-1,-1,enemies) * (1 << 15); //probe * 2^15
+//		input2 += probe(0 ,-1,enemies) * (1 << 14);
+//		input2 += probe(1 ,-1,enemies) * (1 << 13);
+//		input2 += probe(-1,0 ,enemies) * (1 << 12);
+//		input2 += probe(1 ,0 ,enemies) * (1 << 11);
+//		input2 += probe(-1,1 ,enemies) * (1 << 10);
+//		input2 += probe(1 ,1 ,enemies) * (1 <<  9);
 
 		/* levelScene情報 */
-//				input += probe(-1,-1,levelScene) * (1 << 8);
-//				input += probe(0 ,-1,levelScene) * (1 << 7);
-//				input += probe(1 ,-1,levelScene) * (1 << 6);
-//				input += probe(-1,0 ,levelScene) * (1 << 5);
-//				input += probe(1 ,0 ,levelScene) * (1 << 4);
-//				input += probe(-1,1 ,levelScene) * (1 << 3);
-//				input += probe(1 ,1 ,levelScene) * (1 << 2);
-		
-		//4-1's conditions
+//		input2 += probe(-1,-1,levelScene) * (1 << 8);
+//		input2 += probe(0 ,-1,levelScene) * (1 << 7);
+//		input2 += probe(1 ,-1,levelScene) * (1 << 6);
+//		input2 += probe(-1,0 ,levelScene) * (1 << 5);
+//		input2 += probe(1 ,0 ,levelScene) * (1 << 4);
+//		input2 += probe(-1,1 ,levelScene) * (1 << 3);
+//		input2 += probe(1 ,1 ,levelScene) * (1 << 2);
 
-		input += (isEnemy(1,3) ? 1: 0) * (1 << 15);
-		input += (isEnemy(-1,3) ? 1: 0) * (1 << 14);
-		input += (isObject(1,3) ? 1: 0) * (1 << 13);
-		input += (isObject(-1,3) ? 1: 0) * (1 << 12);
-		
-		input += (ableToLand() ? 1: 0) * (1 << 11);
-		
-		input += (isObject(1,3) ? 1: 0) * (1 << 10);
-		input += (isObject(2,3) ? 1: 0) * (1 << 9);
+		//4-1's conditions, 4-2's conditions
+
+//				input += (isEnemy(1,3) ? 1: 0) * (1 << 15);
+//				input += (isEnemy(-1,3) ? 1: 0) * (1 << 14);
+//				input += (isObject(1,3) ? 1: 0) * (1 << 13);
+//				input += (isObject(-1,3) ? 1: 0) * (1 << 12);
+//				
+//				input += (ableToLand() ? 1: 0) * (1 << 11);
+//				
+//				input += (isObject(1,3) ? 1: 0) * (1 << 10);
+//				input += (isObject(2,3) ? 1: 0) * (1 << 9);
+//				input += (ableToLand() ? 1: 0) * (1 << 8);
+//		
+//				input += (isHole(1) ? 1: 0) * (1 << 7);
+//				input += (isObject(0,3) ? 1: 0) * (1 << 6);
+//				
+//				input += (isEnemy(2,3) ? 1: 0) * (1 << 5);
+//				input += (isEnemy(1,-3) ? 1: 0) * (1 << 4);
+//				
+//				input += (!isWall() ? 1: 0) * (1 << 3);
+//				
+//		
+//				input += marioDirection(x1,x2) * (1 << 2);
+//		
+//				input += (isMarioOnGround ? 1: 0) * (1 << 1);
+//				input += (isMarioAbleToJump ? 1: 0) * (1 << 0);
+
+				// 4-3's condition
+		input += isEnemy(1,3) ? 1: 0 * (1 <<16);
+		input += isEnemy(1,-3) ? 1: 0 * (1 << 15);
+		input += isEnemy(-1,3) ? 1: 0 * (1 << 14);
+		input += (isEnemyLev(0) ? 1: 0) * (1 << 13);
+		input += isEnemyLev(-1) ? 1: 0 * (1 << 12);
+		input += isEnemyLev(1) ? 1: 0 * (1 << 11);
+
+		input += (isHole(1) ? 1: 0) * (1 << 10);
+		input += isEnemy(0,-1) ? 1: 0 * (1 << 9);
+
 		input += (ableToLand() ? 1: 0) * (1 << 8);
 
-		input += (isHole(1) ? 1: 0) * (1 << 7);
-		input += (isObject(0,3) ? 1: 0) * (1 << 6);
-		
-		input += (isEnemy(2,3) ? 1: 0) * (1 << 5);
-		input += (isEnemy(1,-3) ? 1: 0) * (1 << 4);
-		
-		input += (!isWall() ? 1: 0) * (1 << 3);
-		
-
-		input += marioDirection(x1,x2) * (1 << 2);
+		input += (isObject(1,3) ? 1: 0) * (1 << 7);
+		input += (isObject(1,-3) ? 1: 0) * (1 << 6);
+		input += (isObject(-1,3) ? 1: 0) * (1 << 5);
+		input += (isObject(-1,-3) ? 1: 0) * (1 << 4);
+		input += (isObject(0,2) ? 1: 0)* (1 << 3);
+		input += (enemyDetailR()) * (1 << 2);
 
 		input += (isMarioOnGround ? 1: 0) * (1 << 1);
 		input += (isMarioAbleToJump ? 1: 0) * (1 << 0);
 
+
+//		input2 += (isMarioOnGround ? 1: 0) * (1 << 1);
+//		input2 += (isMarioAbleToJump ? 1: 0) * (1 << 0);
+
 		//		System.out.println("enemies : "+probe(1,0,enemies));
 
 		/* input から output(act)を決定する */
-		int act = gene[input];	//遺伝子のinput番目の数値を読み取る
+		int act = 0;
+		act = gene[input];	//遺伝子のinput番目の数値を読み取る
 		for(int i=0; i<Environment.numberOfKeys; i++){
 			action[i] = (act %2 == 1);	//2で割り切れるならtrue
 			act /= 2;

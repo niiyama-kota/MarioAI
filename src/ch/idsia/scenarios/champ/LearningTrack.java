@@ -84,7 +84,7 @@ private static int evaluateSubmission(MarioAIOptions marioAIOptions, LearningAge
     Agent agent = learningAgent.getBestAgent(); // this agent will be evaluated
 
     /* 評価のvisualize */
-    marioAIOptions.setVisualization(true);
+    marioAIOptions.setVisualization(false);
 
 //    System.out.println("/*---------------------- finished learning --------------------*/");
 //    System.out.println("LearningTrack best agent = " + agent);
@@ -144,7 +144,7 @@ private static int oldEval(MarioAIOptions marioAIOptions, LearningAgent learning
     float fitness = 0;
     int disqualifications = 0;
 
-    marioAIOptions.setVisualization(false);
+    marioAIOptions.setVisualization(true);
     //final LearningTask learningTask = new LearningTask(marioAIOptions);
     //learningTask.setAgent(learningAgent);
     LearningTask task = new LearningTask(marioAIOptions);
@@ -185,7 +185,7 @@ private static int oldEval(MarioAIOptions marioAIOptions, LearningAgent learning
     // do some post processing if you need to. In general: select the Agent with highest score.
     learningAgent.learn();
     // perform the gameplay task on the same level
-    marioAIOptions.setVisualization(true);
+    marioAIOptions.setVisualization(false);
     Agent bestAgent = learningAgent.getBestAgent();
     marioAIOptions.setAgent(bestAgent);
     BasicTask basicTask = new BasicTask(marioAIOptions);
@@ -219,16 +219,22 @@ public static void main(String[] args){
 //	LearningAgent learningAgent = new LearningWithGA("-lde on -ltb off -ld 2 -ls 0 -le g");
 
 	/* MainTask4_2.java */
-	 LearningAgent learningAgent = new LearningWithGA("-lco off -lb on -le off -lhb off -lg on -ltb on -lhs off -lca on -lde on -ld 5 -ls 133829");
+//	 LearningAgent learningAgent = new LearningWithGA("-lco off -lb on -le off -lhb off -lg on -ltb on -lhs off -lca on -lde on -ld 5 -ls 133829");
 	 
 	/* MainTask4_3.java */
-	// LearningAgent learningAgent = new LearningWithGA("-lde on -i off -ld 30 -ls 133434 -lhb on");
+	 LearningAgent learningAgent = new LearningWithGA("-lde on -i off -ld 30 -ls 133434 -lhb on");
+//	 LearningAgent learningAgent = new MLPESLearningAgent();
 
-	System.out.println("main.learningAgent = " + learningAgent);
+//	System.out.println("main.learningAgent = " + learningAgent);
 
 	/* パラメータを設定する */
 	MarioAIOptions marioAIOptions = new MarioAIOptions(args);
-	//LearningAgent learningAgent = new MLPESLearningAgent(); // Learning track competition entry goes here
+	
+	//added
+//	marioAIOptions.setArgs("-lde on -i off -ld 30 -ls 133434 -lhb on");
+//	marioAIOptions.setVisualization(false);
+	
+//	LearningAgent learningAgent = new MLPESLearningAgent(); // Learning track competition entry goes here
 
 
 
@@ -265,11 +271,11 @@ public static void main(String[] args){
 	*/
 
 	/*------ Level 3 ------*/
-    /*
-    marioAIOptions = new MarioAIOptions(args);
-    marioAIOptions.setArgs("-lde on -i on -ld 30 -ls 133434 -lhb on");
-    finalScore += LearningTrack.evaluateSubmission(marioAIOptions, learningAgent);
-	*/
+    
+//    marioAIOptions = new MarioAIOptions(args);
+//    marioAIOptions.setArgs("-lde on -i on -ld 30 -ls 133434 -lhb on");
+//    finalScore += LearningTrack.evaluateSubmission(marioAIOptions, learningAgent);
+	
 
 	/*------ Level 4 ------*/
 

@@ -27,14 +27,14 @@
 
 package ch.idsia.agents;
 
+import java.text.DecimalFormat;
+
 import ch.idsia.agents.learning.MediumSRNAgent;
 import ch.idsia.benchmark.mario.engine.GlobalOptions;
 import ch.idsia.benchmark.mario.environments.Environment;
 import ch.idsia.benchmark.tasks.LearningTask;
 import ch.idsia.evolution.ea.ES;
 import ch.idsia.utils.wox.serial.Easy;
-
-import java.text.DecimalFormat;
 
 /**
  * Created by IntelliJ IDEA.
@@ -60,7 +60,8 @@ DecimalFormat df = new DecimalFormat("###.####");
 
 public MLPESLearningAgent()
 {
-    agent = new MediumSRNAgent();
+//    agent = new MediumSRNAgent();
+	agent = (MediumSRNAgent)(Easy.load("evolved-progress-MLPESLearningAgent994-uid-2019-11-21_03-10-25.xml"));
 }
 
 public void learn()
