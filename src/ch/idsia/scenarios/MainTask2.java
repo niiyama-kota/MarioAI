@@ -33,27 +33,25 @@ import ch.idsia.benchmark.tasks.BasicTask;
 import ch.idsia.tools.MarioAIOptions;
 
 /**
- * Created by IntelliJ IDEA. User: Sergey Karakovskiy, sergey at idsia dot ch Date: Mar 17, 2010 Time: 8:28:00 AM
- * Package: ch.idsia.scenarios
+ * Created by IntelliJ IDEA. User: Sergey Karakovskiy, sergey at idsia dot ch
+ * Date: Mar 17, 2010 Time: 8:28:00 AM Package: ch.idsia.scenarios
  */
-public final class MainTask2
-{
-public static void main(String[] args)
-{
-    final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
+public final class MainTask2 {
+    public static void main(String[] args) {
+        final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
 
-    final Agent agent = new OwnAgent2();
-    marioAIOptions.setAgent(agent);
-    
-    marioAIOptions.setArgs("-lca off -lhs off -ld 1 -ls 0 -le off");
-    
-//    int seed = 1017;
-//    marioAIOptions.setLevelRandSeed(seed);
-    
-    final BasicTask basicTask = new BasicTask(marioAIOptions);
-    basicTask.setOptionsAndReset(marioAIOptions);
-    basicTask.doEpisodes(1,true,1);
-    System.exit(0);
-}
+        final Agent agent = new OwnAgent2();
+        marioAIOptions.setAgent(agent);
+
+        marioAIOptions.setArgs("-lca off -lhs off -ld 1 -ls 0 -le off");
+
+        // int seed = 1017;
+        // marioAIOptions.setLevelRandSeed(seed);
+
+        final BasicTask basicTask = new BasicTask(marioAIOptions);
+        basicTask.setOptionsAndReset(marioAIOptions);
+        basicTask.doEpisodes(1, true, 1);
+        System.exit(0);
+    }
 
 }
