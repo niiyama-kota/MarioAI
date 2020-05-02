@@ -1,7 +1,7 @@
 /.classpath
 /.project
 Learning*.xml
-/.MarioAI.code-workspace
+/MarioAI.code-workspace
 *.txt
 .setting
 .vscode
