@@ -6,11 +6,23 @@
 
 ## MainTask3.javaの実行
 
-src/ch/idsia/scenariosの中にあるこのファイルは、ルールベースで自作したOwnAgent2を呼び出してゲームをプレイさせる。
-OwnAgent2はsrc/ch/idsia/agents/controllersに配置されている。
+src/ch/idsia/scenariosの中にあるこのファイルは，ルールベースで自作したOwnAgent2を呼び出してゲームをプレイさせる．
+OwnAgent2はsrc/ch/idsia/agents/controllersに配置されている．
 
 ## MainTask4-1.java及びMainTask4-2.javaの実行
 
-src/ch/idsia/scenariosの中にあるこのファイルを実行すると、遺伝アルゴリズムを用いて学習させたエージェントがゲームをプレイする。
-遺伝アルゴリズムのフレームワークはsrc/ch/idsia/agents/LearningWithGA.javaにあり、src/ch/idsia/scenarios/champ/LearningTrack.javaで学習させる面を指定して実行することで実際に学習させて新しいエージェントを作ることができる。(スコアが最高値を更新した時にsrcと同じディレクトリ内にxmlファイルが作成され、設定した面でfinal Agent agent = (GAAgent)(Easy.load("*.xml"));とすればよい。)
-どんな情報を受け取って学習するかを変えたければ、src/ch/agents/GAAgent.javaに格納されている変数inputをいじれば良い。
+src/ch/idsia/scenariosの中にあるこのファイルを実行すると，遺伝アルゴリズムを用いて学習させたエージェントがゲームをプレイする．
+遺伝アルゴリズムのフレームワークはsrc/ch/idsia/agents/LearningWithGA.javaにあり，src/ch/idsia/scenarios/champ/LearningTrack.javaで学習させる面を指定して実行することで実際に学習させて新しいエージェントを作ることができる．(スコアが最高値を更新した時にsrcと同じディレクトリ内にxmlファイルが作成され，設定した面でfinal Agent agent = (GAAgent)(Easy.load("*.xml"));とすればよい．)
+どんな情報を受け取って学習するかを変えたければ、src/ch/agents/GAAgent.javaに格納されている変数inputをいじれば良い．
+
+## 各エージェントの説明
+
+### MainTask3
+
+ルールベース．敵が前方にいる，落とし穴がある，などを検知して攻撃，回避する．
+高い壁とかがあると引っかかる．
+
+### MainTask4
+
+遺伝アルゴリズム．各ビットで上のルールベースのようなフラグを管理している．ルールをうまく定めれば強いエージェントができるのは間違いないが，設定するフラグが多くなれば状態数が2のべき乗オーダーなので死ぬ．要は状態から押されるボタンを決める関数を学習させているが，ステージごとにエージェントを変えているので，あくまでもそのステージでその状態なら，このアクションすると評価値が高くなるという程度の意味しかないのではないかと思う．実際にあるステージで学習させたエージェントは他のステージでは，「コントローラ貸して．」って言いたくなる．
+要は過学習で圧倒的に内弁慶なマリオが生成される．
