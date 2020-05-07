@@ -149,8 +149,8 @@ implements Agent,Evolvable,Comparable,Cloneable{
 //	public boolean isObject(int x, int y) {
 //		boolean ins = false;
 //		for(int i=0;i<=y;i++) {
-//			ins = ins || (getReceptiveFieldCellValue(marioEgoRow-i,marioEgoCol+x)!=0 
-//					|| getReceptiveFieldCellValue(marioEgoRow-i,marioEgoCol+x) != 2 
+//			ins = ins || (getReceptiveFieldCellValue(marioEgoRow-i,marioEgoCol+x)!=0
+//					|| getReceptiveFieldCellValue(marioEgoRow-i,marioEgoCol+x) != 2
 //					|| getReceptiveFieldCellValue(marioEgoRow-i,marioEgoCol+x) != 5);
 //		}
 //		return ins;
@@ -236,7 +236,7 @@ implements Agent,Evolvable,Comparable,Cloneable{
 		 */
 
 		/* enemies情報(上位7桁) */
-//		input2 += (getEnemiesCellValue(marioEgoRow+1,marioEgoCol) == 93 || getEnemiesCellValue(marioEgoRow+1,marioEgoCol) == 99) ? 1: 0 * (1<<16);  
+//		input2 += (getEnemiesCellValue(marioEgoRow+1,marioEgoCol) == 93 || getEnemiesCellValue(marioEgoRow+1,marioEgoCol) == 99) ? 1: 0 * (1<<16);
 //		input2 += probe(-1,-1,enemies) * (1 << 15); //probe * 2^15
 //		input2 += probe(0 ,-1,enemies) * (1 << 14);
 //		input2 += probe(1 ,-1,enemies) * (1 << 13);
@@ -260,24 +260,24 @@ implements Agent,Evolvable,Comparable,Cloneable{
 //				input += (isEnemy(-1,3) ? 1: 0) * (1 << 14);
 //				input += (isObject(1,3) ? 1: 0) * (1 << 13);
 //				input += (isObject(-1,3) ? 1: 0) * (1 << 12);
-//				
+//
 //				input += (ableToLand() ? 1: 0) * (1 << 11);
-//				
+//
 //				input += (isObject(1,3) ? 1: 0) * (1 << 10);
 //				input += (isObject(2,3) ? 1: 0) * (1 << 9);
 //				input += (ableToLand() ? 1: 0) * (1 << 8);
-//		
+//
 //				input += (isHole(1) ? 1: 0) * (1 << 7);
 //				input += (isObject(0,3) ? 1: 0) * (1 << 6);
-//				
+//
 //				input += (isEnemy(2,3) ? 1: 0) * (1 << 5);
 //				input += (isEnemy(1,-3) ? 1: 0) * (1 << 4);
-//				
+//
 //				input += (!isWall() ? 1: 0) * (1 << 3);
-//				
-//		
+//
+//
 //				input += marioDirection(x1,x2) * (1 << 2);
-//		
+//
 //				input += (isMarioOnGround ? 1: 0) * (1 << 1);
 //				input += (isMarioAbleToJump ? 1: 0) * (1 << 0);
 

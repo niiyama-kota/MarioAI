@@ -42,7 +42,9 @@ public static void main(String[] args)
 {
     final MarioAIOptions marioAIOptions = new MarioAIOptions(args);
 
-    final Agent agent = (Agent) (Easy.load("4-1_conditionOf4-3.xml"));
+    // this agent can complete the stage
+//    final Agent agent = (Agent) (Easy.load("4-1_conditionOf4-3.xml"));
+    final Agent agent = (Agent) (Easy.load("4-1.xml"));
     marioAIOptions.setAgent(agent);
 
     marioAIOptions.setArgs("-lde on -ltb off -ld 2 -ls 0 -le g");

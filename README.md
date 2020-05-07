@@ -14,6 +14,7 @@ OwnAgent2はsrc/ch/idsia/agents/controllersに配置されている．
 src/ch/idsia/scenariosの中にあるこのファイルを実行すると，遺伝アルゴリズムを用いて学習させたエージェントがゲームをプレイする．
 遺伝アルゴリズムのフレームワークはsrc/ch/idsia/agents/LearningWithGA.javaにあり，src/ch/idsia/scenarios/champ/LearningTrack.javaで学習させる面を指定して実行することで実際に学習させて新しいエージェントを作ることができる．(スコアが最高値を更新した時にsrcと同じディレクトリ内にxmlファイルが作成され，設定した面でfinal Agent agent = (GAAgent)(Easy.load("*.xml"));とすればよい．)
 どんな情報を受け取って学習するかを変えたければ、src/ch/agents/GAAgent.javaに格納されている変数inputをいじれば良い．
+4-3で使っているエージェントは与えられている環境情報が4-1,4-2とは異なるので，4-1,4-2を動かすときには注意が必要．src/ch/idsia/agents/GAAgent.javaの変数inputを変えてやる必要がある(修正してデフォルトでは4-1,4-2のinputにした)．なお，4-1,4-2の条件はフラグを数個無駄にしているので4-3のinputの条件で学習しなおすべき．
 
 ## 各エージェントの説明
 
